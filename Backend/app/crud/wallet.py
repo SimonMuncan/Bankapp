@@ -1,6 +1,6 @@
 from sqlalchemy import select, update
-from models.wallet import Wallets
-from schemas.wallet import WalletOut
+from app.models.wallet import Wallets
+from app.schemas.wallet import WalletOut
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

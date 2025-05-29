@@ -1,9 +1,9 @@
 from decimal import Decimal
 from sqlalchemy import desc, insert, select, update
-from models.user import Users
-from models.transaction import Transactions
-from schemas.transactions import TransactionIn
-from models.wallet import Wallets
+from app.models.user import Users
+from app.models.transaction import Transactions
+from app.schemas.transactions import TransactionIn
+from app.models.wallet import Wallets
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
