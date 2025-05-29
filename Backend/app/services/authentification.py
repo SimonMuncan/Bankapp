@@ -5,8 +5,8 @@ import jwt
 from fastapi import Depends, HTTPException, Request
 from starlette import status
 from starlette.responses import Response, JSONResponse
-from schemas.user import CurrentUser
-from core.auth import oauth2_bearer, OAUTH_ALGORITHM, OAUTH_SECRET_KEY
+from app.schemas.user import CurrentUser
+from app.core.auth import oauth2_bearer, OAUTH_ALGORITHM, OAUTH_SECRET_KEY
 
 
 def create_access_token(

@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select
-from models.user import Users
-from models.wallet import Wallets
-from schemas.user import UserIn
+from app.models.user import Users
+from app.models.wallet import Wallets
+from app.schemas.user import UserIn
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 

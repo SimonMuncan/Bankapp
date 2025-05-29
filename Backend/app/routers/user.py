@@ -2,10 +2,10 @@ from datetime import timedelta
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from services.authentification import create_access_token
-from crud.user import authenticate_user, create_new_user, get_user_email
-from schemas.user import OAuth2TokenResponse, UserIn
-from dependancies.database import db_dependancy
+from app.services.authentification import create_access_token
+from app.crud.user import authenticate_user, create_new_user, get_user_email
+from app.schemas.user import OAuth2TokenResponse, UserIn
+from app.dependancies.database import db_dependancy
 from starlette import status
 
 

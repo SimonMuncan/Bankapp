@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from crud.user import get_user
-from schemas.user import CurrentUser
-from schemas.wallet import WalletOut
-from crud.wallet import add_into_wallet, get_wallet
-from dependancies.database import db_dependancy
-from dependancies.auth import current_user
+from app.crud.user import get_user
+from app.schemas.user import CurrentUser
+from app.schemas.wallet import WalletOut
+from app.crud.wallet import add_into_wallet, get_wallet
+from app.dependancies.database import db_dependancy
+from app.dependancies.auth import current_user
 
 
 router_wallet = APIRouter(

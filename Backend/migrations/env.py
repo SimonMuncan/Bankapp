@@ -1,5 +1,6 @@
 import asyncio
 from logging.config import fileConfig
+import os
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -24,7 +25,20 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 
+effective_db_url = os.getenv("DATABASE_URL")
+if not effective_db_url:
+    # Fallback to alembic.ini if DATABASE_URL is not set (e.g., for local non-Docker runs)
+    effective_db_url = config.get_main_option("sqlalchemy.url")
+    if not effective_db_url:
+        raise RuntimeError(
+            "DATABASE_URL environment variable is not set and sqlalchemy.url "
+            "is not configured in alembic.ini. Alembic cannot determine database URL."
+        )
+    print(f"Warning: DATABASE_URL environment variable not set. Alembic using "
+          f"sqlalchemy.url from alembic.ini: {effective_db_url}")
 
+# Override the sqlalchemy.url from alembic.ini with the effective URL
+config.set_main_option("sqlalchemy.url", effective_db_url)
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")

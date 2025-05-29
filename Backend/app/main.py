@@ -1,10 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from services.authentification import auth_middleware
-from routers.user import router_user
-from routers.wallet import router_wallet
-from routers.transaction import router_transaction
+from app.services.authentification import auth_middleware
+from app.routers.user import router_user
+from app.routers.wallet import router_wallet
+from app.routers.transaction import router_transaction
 
 app = FastAPI(
     title="My Wallet",
@@ -27,6 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+""" 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+"""
+

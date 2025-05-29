@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from crud.transaction import get_all_transactions, log_transaction, transfer
-from crud.wallet import get_wallet
-from crud.user import get_user
-from schemas.transactions import TransactionIn, TransactionName
-from dependancies.database import db_dependancy
-from dependancies.auth import current_user
+from app.crud.transaction import get_all_transactions, log_transaction, transfer
+from app.crud.wallet import get_wallet
+from app.crud.user import get_user
+from app.schemas.transactions import TransactionIn, TransactionName
+from app.dependancies.database import db_dependancy
+from app.dependancies.auth import current_user
 
 router_transaction = APIRouter(
     prefix="/transactions",
