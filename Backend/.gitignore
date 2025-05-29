@@ -1,2 +1,11 @@
-/__pycache__
+app/__pycache__
+app/core/__pycache__
+app/crud/__pycache__
+app/dependancies/__pycache__
+app/models/__pycache__
+app/routers/__pycache__
+app/schemas/__pycache__
+app/services/__pycache__
+migrations/__pycache__
+migrations/versions/__pycache__
 .env
