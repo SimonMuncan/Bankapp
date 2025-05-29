@@ -5,7 +5,6 @@ A full-stack application for managing user wallets and transactions, built with 
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
   - [1. Clone the Repository](#1-clone-the-repository)
@@ -20,23 +19,6 @@ A full-stack application for managing user wallets and transactions, built with 
 * **Database:** PostgreSQL 15
 * **Containerization:** Docker, Docker Compose
 
-## Project Structure
-├── Backend/
-│   ├── app/                 # FastAPI application code
-│   ├── migrations/          # Alembic migration scripts
-│   │   └── versions/
-│   ├── tests/               # Backend tests
-│   ├── alembic.ini          # Alembic configuration
-│   ├── Dockerfile           # Backend Dockerfile
-│   └── requirements.txt     # Python dependencies
-├── Frontend/
-│   └── bankapp/             # React application root
-│       ├── public/
-│       ├── src/             # React components and services
-│       ├── Dockerfile       # Frontend Dockerfile
-│       └── package.json     # Node.js dependencies
-├── docker-compose.yml       # Docker Compose configuration
-└── README.md                # This file
 
 ## Prerequisites
 
