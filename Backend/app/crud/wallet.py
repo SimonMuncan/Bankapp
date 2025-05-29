@@ -4,7 +4,7 @@ from app.schemas.wallet import WalletOut
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def get_wallet(user_id, db) -> WalletOut | None:
+async def get_wallet(user_id: int, db: AsyncSession) -> WalletOut | None:
     stmt = select(Wallets).where(Wallets.user_id == user_id)
     result = await db.execute(stmt)
     return result.scalar_one_or_none()

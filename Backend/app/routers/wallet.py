@@ -26,7 +26,7 @@ async def deposit_into(
 @router_wallet.get("/{user_id}")
 async def get_user_wallet(
     user_id: int, db: db_dependancy, current_user: current_user
-) -> dict:
+) -> dict[str, WalletOut | CurrentUser]:
     wallet = await get_wallet(user_id, db)
     user = await get_user(user_id, db)
     if not wallet:

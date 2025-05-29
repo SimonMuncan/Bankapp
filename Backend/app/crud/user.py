@@ -46,13 +46,13 @@ async def authenticate_user(
     return user
 
 
-async def get_user_email(user_email: str, db: AsyncSession) -> Users:
+async def get_user_email(user_email: str, db: AsyncSession) -> Users | None:
     query = select(Users).where(Users.email == user_email)
     result = await db.execute(query)
     return result.scalar_one_or_none()
 
 
-async def get_user(user_id: int, db: AsyncSession) -> Users:
+async def get_user(user_id: int, db: AsyncSession) -> Users | None:
     stmt = select(Users).where(Users.id == user_id)
     result = await db.execute(stmt)
     return result.scalar_one_or_none()

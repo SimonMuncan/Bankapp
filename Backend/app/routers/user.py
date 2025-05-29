@@ -16,7 +16,7 @@ router_user = APIRouter(
 
 
 @router_user.post("/register", status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserIn, db: db_dependancy) -> dict:
+async def create_user(user: UserIn, db: db_dependancy) -> dict[str, str]:
     check_user = await get_user_email(user.email, db)
     if check_user:
         raise HTTPException(status_code=400, detail="Email already exist")

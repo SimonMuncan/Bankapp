@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
 
-async def transfer(sender_id, reciever_id, amount, db) -> bool:
+async def transfer(sender_id: int, reciever_id: int, amount: float, db: AsyncSession) -> bool:
     try:
         stmt1 = (
             update(Wallets)

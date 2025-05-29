@@ -24,7 +24,7 @@ class Users(Base):
         back_populates="rec_user",
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"""<Event(
             id='{self.id}',
             name='{self.name}',

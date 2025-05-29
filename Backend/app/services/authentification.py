@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
+from typing import Annotated, Any
 
 import jwt
 from fastapi import Depends, HTTPException, Request
@@ -45,7 +45,7 @@ async def get_current_user(
     return CurrentUser(id=user_id, email=email, name=name)
 
 
-async def auth_middleware(request: Request, call_next) -> Response:
+async def auth_middleware(request: Request, call_next) -> Response | Any:
     public_routes = {
         "/",
         "/token",
