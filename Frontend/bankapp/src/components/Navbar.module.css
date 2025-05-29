@@ -1,0 +1,122 @@
+.navbarCustom {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    padding: 15px 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.navbarBrand {
+    color: white !important;
+    font-size: 1.8em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+    text-decoration: none !important; 
+}
+
+.navbarBrand:hover {
+    color: #e0e0e0 !important;
+}
+
+
+.navLink {
+    color: white !important;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 8px 15px !important;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    text-decoration: none !important; 
+}
+
+.navLink:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+}
+
+.navLink.active {
+    color: #00bcd4 !important;
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    font-weight: 600 !important;
+    transform: none !important;
+}
+
+.navbarText {
+    color: white !important;
+    font-size: 1em;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.navbarText a {
+    color: #a2e8ff !important;
+    font-weight: 600;
+    margin-left: 5px;
+    text-decoration: none !important;
+    transition: color 0.3s ease;
+}
+
+.navbarText a:hover {
+    color: #ffffff !important;
+    text-decoration: underline !important; 
+}
+
+.navbarLogInText {
+    color: white !important;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.navbarLogInText a {
+    color: #a2e8ff !important;
+    font-weight: 600;
+    margin-left: 5px;
+    text-decoration: none !important;
+    transition: color 0.3s ease;
+}
+
+.navbarLogInText a:hover {
+    color: #ffffff !important;
+    text-decoration: underline !important;
+}
+
+@media (max-width: 991.98px) {
+    .navbarCustom {
+        padding: 10px 20px;
+    }
+
+    .navbarCustom .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .navbarCustom .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    }
+
+    .navbarCustom .navbar-collapse {
+        background-color: #0056b3;
+        border-radius: 8px;
+        margin-top: 10px;
+        padding: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .navLink {
+        margin: 5px 0;
+        padding: 10px 15px !important;
+        text-align: center;
+        width: 100%;
+    }
+
+    .navbarText {
+        margin-left: 0;
+        margin-top: 15px;
+        justify-content: center;
+    }
+    .navbarLogInText.ms-auto {
+        margin-left: unset !important; 
+        margin-right: unset !important; 
+    }
+}

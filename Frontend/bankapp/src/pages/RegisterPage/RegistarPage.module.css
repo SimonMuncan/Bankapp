@@ -1,0 +1,128 @@
+
+.authContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh; /* Adjust as needed, considering navbar height */
+  background-color: #f0f2f5; /* Light grey background */
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.authFormCard {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Max width of the form card */
+  text-align: center;
+}
+
+.authTitle {
+  font-size: 2em; /* Increased size */
+  color: #1d2129; /* Darker text color */
+  margin-bottom: 25px; /* Increased margin */
+  font-weight: 600;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form groups */
+}
+
+.formGroup {
+  text-align: left;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.9em;
+  color: #4b4f56; /* Medium grey for labels */
+  margin-bottom: 8px; /* Increased margin */
+  font-weight: 500;
+}
+
+.formInput {
+  width: 100%;
+  padding: 12px 15px; /* Increased padding */
+  border: 1px solid #ccd0d5; /* Lighter border */
+  border-radius: 6px;
+  font-size: 1em;
+  box-sizing: border-box; /* Important for width calculation */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.formInput:focus {
+  border-color: #007bff; /* Blue border on focus */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Blue glow on focus */
+  outline: none;
+}
+
+.authButton {
+  background-color: #007bff; /* Primary blue */
+  color: white;
+  padding: 12px 15px; /* Consistent padding */
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1em; /* Slightly larger font */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 10px; /* Add some space above the button */
+}
+
+.authButton:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.authRedirectText {
+  margin-top: 25px; /* Increased margin */
+  font-size: 0.9em;
+  color: #4b4f56;
+}
+
+.authLink {
+  color: #007bff; /* Blue for links */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authLink:hover {
+  text-decoration: underline;
+}
+
+.errorMessage {
+  color: #dc3545; /* Red for errors */
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-bottom: 15px; /* Space below error message */
+}
+
+.successMessage {
+  color: #155724; /* Dark green for success */
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .authFormCard {
+    padding: 25px 20px;
+  }
+  .authTitle {
+    font-size: 1.8em;
+  }
+  .formInput, .authButton {
+    font-size: 0.95em;
+  }
+}

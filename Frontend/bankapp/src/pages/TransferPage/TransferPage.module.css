@@ -1,0 +1,264 @@
+.transferContainer {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f8f9fa; 
+}
+
+.heroSection {
+    background: linear-gradient(135deg, #007bff, #0056b3); 
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeInBackground 1s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroTitle {
+    font-size: 3em;
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    animation: slideInTop 0.8s ease-out forwards;
+}
+
+.heroSubtitle {
+    font-size: 1.4em;
+    margin-bottom: 30px; 
+    opacity: 0.9;
+    animation: slideInTop 1s ease-out forwards;
+    animation-delay: 0.2s;
+    max-width: 700px;
+}
+
+.transferCard { 
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); 
+    padding: 40px;
+    width: 100%;
+    max-width: 450px; 
+    text-align: left; 
+    animation: slideInBottom 0.8s ease-out forwards;
+    animation-delay: 0.4s;
+    transform-origin: center bottom;
+}
+
+.formGroup {
+    margin-bottom: 25px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    font-size: 1.1em;
+}
+
+.inputField {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.inputField:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.button {
+    background-color: #28a745; 
+    color: white;
+    border: none;
+    border-radius: 50px; 
+    padding: 15px 35px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover:not(:disabled) {
+    background-color: #218838;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.8;
+    box-shadow: none;
+}
+
+.loadingMessage,
+.errorMessage,
+.successMessage {
+    margin-top: 20px;
+    font-size: 1em;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.loadingMessage {
+    color: #007bff;
+    background-color: #e6f7ff;
+}
+
+.errorMessage {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.successMessage {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.instructionsSection {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.instructionsTitle {
+    font-size: 2.8em;
+    color: #333;
+    margin-bottom: 50px;
+    font-weight: 600;
+}
+
+.instructionGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.instructionCard {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.instructionCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.instructionHeading {
+    font-size: 1.8em;
+    color: #007bff;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.instructionDescription {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.6;
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInTop {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInBottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 50px 20px;
+    }
+    .heroTitle {
+        font-size: 2.5em;
+    }
+    .heroSubtitle {
+        font-size: 1.1em;
+    }
+    .transferCard {
+        padding: 30px;
+    }
+    .button {
+        font-size: 1.1em;
+        padding: 12px 25px;
+    }
+    .instructionsTitle {
+        font-size: 2.2em;
+        margin-bottom: 40px;
+    }
+    .instructionGrid {
+        grid-template-columns: 1fr;
+    }
+    .instructionCard {
+        padding: 25px;
+    }
+    .instructionHeading {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .heroSection {
+        padding: 30px 15px;
+    }
+    .heroTitle {
+        font-size: 2em;
+    }
+    .heroSubtitle {
+        font-size: 0.95em;
+    }
+    .transferCard {
+        padding: 25px;
+    }
+    .button {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+    .instructionsSection {
+        padding: 40px 15px;
+    }
+    .instructionsTitle {
+        font-size: 1.8em;
+    }
+}
