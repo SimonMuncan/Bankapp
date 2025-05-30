@@ -89,7 +89,7 @@ const Transactions = () => {
                             disabled="true"
                             className={styles.button}
                         >
-                            {isLoading && activeUserId ? 'Loading...' : 'Fetch Transactions'}
+                            {isLoading && activeUserId ? 'Loading...' : 'Find Transactions'}
                         </button>
                     </div>
                 </div>
