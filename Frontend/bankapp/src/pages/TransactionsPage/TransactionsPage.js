@@ -82,7 +82,7 @@ const Transactions = () => {
                                 placeholder="e.g., 123"
                                 min="1"
                                 className={styles.inputField}
-                                disabled="true"
+                                disabled={true}
                             />
                         </div>
                         <button
@@ -111,8 +111,8 @@ const Transactions = () => {
                                     <table className={styles.transactionTable}>
                                         <thead>
                                             <tr>
-                                                <th>Sender ID</th>
-                                                <th>Receiver ID</th>
+                                                <th>Sender</th>
+                                                <th>Receiver</th>
                                                 <th>Amount</th>
                                                 <th>Type</th>
                                                 <th>Date & Time</th>
@@ -123,8 +123,8 @@ const Transactions = () => {
                                         <tbody>
                                             {transactions.map((transaction) => (
                                                 <tr key={transaction.id || `${transaction.sender_id}-${transaction.receiver_id}-${transaction.timestamp}`}>
-                                                    <td>{transaction.sender_id || '-'}</td>
-                                                    <td>{transaction.receiver_id || '-'}</td>
+                                                    <td>{transaction.sender || '-'}</td>
+                                                    <td>{transaction.receiver || '-'}</td>
                                                     <td className={transaction.status && transaction.receiver_id === parseInt(activeUserId) ? styles.amountSuccess : styles.amountFailed}>
                                                         {transaction.sender_id === parseInt(activeUserId) ? `- $${parseFloat(transaction.amount).toFixed(2)}` : `+ $${parseFloat(transaction.amount).toFixed(2)}`}
                                                     </td>
