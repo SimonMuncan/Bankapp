@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getTransactions } from '../../services/transactionsService';
 import styles from './TransactionsPage.module.css'; 
 import { useSelector } from 'react-redux'; 
+import Search from "../../components/Search";
 
 function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -75,35 +76,16 @@ const Transactions = () => {
         setCurrentPage(prevPage => prevPage + 1);
     };
 
-    const handleSearchInput = (event) => {
-        setSearchTerm(event.target.value);
-    }
-    
+
     return (
         <div className={styles.transactionsContainer}>
             <div className={styles.heroSection}>
                 <h1 className={styles.heroTitle}>Transaction History</h1>
                 <p className={styles.heroSubtitle}>View a detailed log of all financial activities.</p>
             </div>
-            
-            <div className={styles.mainContentGrid}>
-                <div className={styles.leftPanel}>
-                    <div className={styles.card}>
-                        <h3 className={styles.cardTitle}>Find Transactions</h3>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="searchTerm" className={styles.label}>Search transaction by name:</label>
-                            <input
-                                id="searchTerm"
-                                type="text"
-                                value={searchTerm} 
-                                placeholder="e.g., Marko"
-                                className={styles.inputField}
-                                onChange={handleSearchInput}
-                            />
-                        </div>
-                    </div>
-                </div>
 
+            <div className={styles.mainContentGrid}>
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                 <div className={styles.rightPanel}>
                     <div className={`${styles.card} ${styles.transactionsCard}`}>
                         <h3 className={styles.cardTitle}>Recent Transactions</h3>
