@@ -70,7 +70,7 @@ async def get_all_transactions(
         final_stmt = (
             base_stmt
             .where(
-                (Sender.name.icontains(query)) | (Receiver.name.icontains(query))
+                (Sender.name.icontains(query)) | (Receiver.name.icontains(query) | (Transactions.description.icontains(query)))
             )
             .order_by(desc(Transactions.timestamp))
             .limit(limit=limit)

@@ -85,7 +85,7 @@ const Transactions = () => {
                 <h1 className={styles.heroTitle}>Transaction History</h1>
                 <p className={styles.heroSubtitle}>View a detailed log of all financial activities.</p>
             </div>
-
+            
             <div className={styles.mainContentGrid}>
                 <div className={styles.leftPanel}>
                     <div className={styles.card}>
