@@ -14,12 +14,13 @@ router_transaction = APIRouter(
 
 @router_transaction.get("/{user_id}")
 async def get_transactions(
+    query: str,
     db: db_dependancy,
     current_user: current_user,
     limit: int = 10,
     offset: int = 0,
 ) -> list[TransactionName]:
-    transactions_list = await get_all_transactions(current_user.id, limit, offset, db)
+    transactions_list = await get_all_transactions(query, current_user.id, limit, offset, db)
     if not transactions_list:
         return []
 

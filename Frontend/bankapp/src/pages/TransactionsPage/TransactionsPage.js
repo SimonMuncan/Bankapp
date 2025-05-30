@@ -3,6 +3,19 @@ import { getTransactions } from '../../services/transactionsService';
 import styles from './TransactionsPage.module.css'; 
 import { useSelector } from 'react-redux'; 
 
+function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+    return debouncedValue;
+}
+
 const ITEMS_PER_PAGE = 10;
 
 const Transactions = () => {
@@ -11,10 +24,11 @@ const Transactions = () => {
     const [isLastPage, setIsLastPage] = useState(false);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const { user } = useSelector(state => state.auth);
-
-    const activeUserId = user.id
-    const fetchUserTransactions = useCallback(async (userId, page) => {
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    const activeUserId = user.id;
+    const fetchUserTransactions = useCallback(async (query, userId, page) => {
         if (!userId) {
             setTransactions([]);
             setIsLastPage(true); 
@@ -26,7 +40,7 @@ const Transactions = () => {
         const offset = (page - 1) * ITEMS_PER_PAGE;
 
         try {
-            const response = await getTransactions(userId, ITEMS_PER_PAGE, offset);
+            const response = await getTransactions(query, userId, ITEMS_PER_PAGE, offset);
             if (Array.isArray(response)) {
                 setTransactions(response);
                 setIsLastPage(response.length < ITEMS_PER_PAGE); 
@@ -47,10 +61,10 @@ const Transactions = () => {
     }, []);
 
     useEffect(() => {
-        if (activeUserId) { 
-            fetchUserTransactions(activeUserId, currentPage);
+        if (activeUserId) {
+            fetchUserTransactions(debouncedSearchTerm, activeUserId, currentPage);
         }
-    }, [activeUserId, currentPage, fetchUserTransactions]); 
+    }, [debouncedSearchTerm, activeUserId, currentPage, fetchUserTransactions]) 
 
 
     const handlePreviousPage = () => {
@@ -61,7 +75,10 @@ const Transactions = () => {
         setCurrentPage(prevPage => prevPage + 1);
     };
 
-
+    const handleSearchInput = (event) => {
+        setSearchTerm(event.target.value);
+    }
+    
     return (
         <div className={styles.transactionsContainer}>
             <div className={styles.heroSection}>
@@ -74,23 +91,16 @@ const Transactions = () => {
                     <div className={styles.card}>
                         <h3 className={styles.cardTitle}>Find Transactions</h3>
                         <div className={styles.formGroup}>
-                            <label htmlFor="userIdInput" className={styles.label}>Search transaction:</label>
+                            <label htmlFor="searchTerm" className={styles.label}>Search transaction by name:</label>
                             <input
-                                id="userIdInput"
-                                type="number"
-                                value=""
-                                placeholder="e.g., 123"
-                                min="1"
+                                id="searchTerm"
+                                type="text"
+                                value={searchTerm} 
+                                placeholder="e.g., Marko"
                                 className={styles.inputField}
-                                disabled={true}
+                                onChange={handleSearchInput}
                             />
                         </div>
-                        <button
-                            disabled="true"
-                            className={styles.button}
-                        >
-                            {isLoading && activeUserId ? 'Loading...' : 'Find Transactions'}
-                        </button>
                     </div>
                 </div>
 
@@ -102,9 +112,7 @@ const Transactions = () => {
                         ) : error ? (
                             <p className={styles.errorMessage}>Error: {error}</p>
                         ) : transactions.length === 0 && activeUserId ? (
-                            <p className={styles.noDataMessage}>No transactions found for User ID: {activeUserId}.</p>
-                        ) : transactions.length === 0 && !activeUserId ? (
-                            <p className={styles.noDataMessage}>Enter a user ID to view transactions.</p>
+                            <p className={styles.noDataMessage}>No transactions found for User: {user.name}.</p>
                         ) : (
                             <>
                                 <div className={styles.tableWrapper}>

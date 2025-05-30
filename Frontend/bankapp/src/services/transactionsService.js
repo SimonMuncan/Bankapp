@@ -1,8 +1,8 @@
 import axios from './api'; 
 
-export const getTransactions = async (userId, limit, offset) => {
+export const getTransactions = async (query, userId, limit, offset) => {
     try {
-        const response = await axios.get(`/transactions/${userId}?limit=${limit}&offset=${offset}`);
+        const response = await axios.get(`/transactions/${userId}?query=${query}&limit=${limit}&offset=${offset}`);
         return response.data; 
     } catch (error) {
         if (error.response) {
