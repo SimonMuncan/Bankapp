@@ -2,6 +2,7 @@ import { useState } from "react";
 import {transferMoney} from '../../services/transferService';
 import styles from './TransferPage.module.css';
 import { useSelector } from 'react-redux'; 
+import Input from "../../components/Input";
 
 
 
@@ -36,14 +37,6 @@ const TransferPage = () => {
             setIsLoading(false);
         }
     }
-
-    const handleReceiverIdInput = (event) => {
-        setReceiverIdInput(event.target.value);
-    }
-
-    const handleAmountInput = (event) => {
-        setAmount(event.target.value);
-    }
     
     const handleTransferButtonClick = () => {
         handleTransfer(user.id, receiverIdInput, amount);
@@ -59,30 +52,10 @@ const TransferPage = () => {
 
                 <div className={styles.transferCard}> 
                     <div className={styles.formGroup}>
-                        <label htmlFor="receiverIdInput" className={styles.label}>Receiver User ID</label>
-                        <input
-                            id="receiverIdInput"
-                            type="number"
-                            value={receiverIdInput}
-                            onChange={handleReceiverIdInput}
-                            placeholder="e.g., 456"
-                            min="1"
-                            className={styles.inputField}
-                        />
+                        <Input id="receiverIdInput" type="number" value={receiverIdInput} set={setReceiverIdInput} title="Receiver User ID" placeHolder="e.g., 456"/>
                     </div>
-
                     <div className={styles.formGroup}>
-                        <label htmlFor="amount" className={styles.label}>Amount to Transfer</label>
-                        <input
-                            id="amount"
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountInput}
-                            placeholder="e.g., 50.00"
-                            min="0.01"
-                            step="0.01"
-                            className={styles.inputField}
-                        />
+                        <Input id="amount" type="number" value={amount} set={setAmount} title="Amount to Transfer" placeHolder="e.g., 50.00"/>
                     </div>
 
                     <button

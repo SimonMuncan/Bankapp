@@ -2,6 +2,7 @@ import { useState } from "react";
 import { depositToWallet } from '../../services/depositService';
 import styles from './DepositPage.module.css'; 
 import { useSelector } from 'react-redux'; 
+import Input from "../../components/Input";
 
 
 const DepositPage = () => {
@@ -37,10 +38,6 @@ const DepositPage = () => {
         }
     };
 
-    const handleAmountInputChange = (event) => {
-        setAmount(event.target.value);
-    }
-
     return (
          <div className={styles.depositContainer}> 
             <div className={styles.heroSection}>
@@ -51,17 +48,9 @@ const DepositPage = () => {
 
                 <div className={styles.depositCard}> 
                     <div className={styles.formGroup}>
-                        <label htmlFor="amount" className={styles.label}>Amount to Deposit</label>
-                        <input
-                            id="amount"
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountInputChange}
-                            placeholder="e.g., 100.00"
-                            min="0.01"
-                            step="0.01"
-                            className={styles.inputField}
-                        />
+                        <div className={styles.formGroup}>
+                            <Input id="amount" type="number" value={amount} set={setAmount} title="Amount to Deposit" placeHolder="e.g., 50.00"/>
+                        </div>
                     </div>
 
                     <button
