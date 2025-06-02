@@ -85,7 +85,7 @@ const Transactions = () => {
             </div>
 
             <div className={styles.mainContentGrid}>
-                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchTitle="Find Transactions" searchLabel="Search transactions" searchPlaceholder="Marko"/>
                 <div className={styles.rightPanel}>
                     <div className={`${styles.card} ${styles.transactionsCard}`}>
                         <h3 className={styles.cardTitle}>Recent Transactions</h3>
