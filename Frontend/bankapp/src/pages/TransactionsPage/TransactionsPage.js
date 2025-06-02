@@ -4,6 +4,7 @@ import styles from './TransactionsPage.module.css';
 import { useSelector } from 'react-redux'; 
 import Search from "../../components/Search";
 import ExportPDF from "../../components/ExportPDF";
+import Checkbox from "../../components/Chckbox";
 
 function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -90,14 +91,6 @@ const Transactions = () => {
         setCurrentPage(prevPage => prevPage + 1);
     };
 
-    const handleTypeFilterChange = (event) => {
-    const { name, checked } = event.target;
-        setTypeFilters(prevFilters => ({
-            ...prevFilters,
-            [name]: checked,
-        }));
-        setCurrentPage(1); 
-    };
 
     return (
         <div className={styles.transactionsContainer}>
@@ -114,28 +107,8 @@ const Transactions = () => {
                             <div className={styles.formGroup}> 
                                 <label className={styles.label}>Filter by type:</label>
                                 <div className={styles.checkboxGroup}>
-                                    <div className={styles.checkboxWrapper}>
-                                        <input
-                                            type="checkbox"
-                                            id="filterIncoming"
-                                            name="incoming"
-                                            checked={typeFilters.incoming}
-                                            onChange={handleTypeFilterChange}
-                                            className={styles.checkboxInput}
-                                        />
-                                        <label htmlFor="filterIncoming" className={styles.checkboxLabel}>Incoming</label> 
-                                    </div>
-                                    <div className={styles.checkboxWrapper}>
-                                        <input
-                                            type="checkbox"
-                                            id="filterOutgoing"
-                                            name="outgoing"
-                                            checked={typeFilters.outgoing}
-                                            onChange={handleTypeFilterChange}
-                                            className={styles.checkboxInput}
-                                        />
-                                        <label htmlFor="filterOutgoing" className={styles.checkboxLabel}>Outgoing</label>
-                                    </div>
+                                    <Checkbox id="filterIncoming" name="incoming" checked={typeFilters.incoming} setTypeFilters={setTypeFilters} setCurrentPage={setCurrentPage}/>
+                                    <Checkbox id="filterOutgoing" name="outgoing" checked={typeFilters.outgoing} setTypeFilters={setTypeFilters} setCurrentPage={setCurrentPage}/>
                                 </div>
                             </div>
                             <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
