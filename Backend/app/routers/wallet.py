@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from crud.user import get_user
-from schemas.user import CurrentUser
-from schemas.wallet import WalletOut
-from crud.wallet import add_into_wallet, get_wallet
-from dependancies.database import db_dependancy
-from dependancies.auth import current_user
+from app.crud.user import get_user
+from app.schemas.user import CurrentUser
+from app.schemas.wallet import WalletOut
+from app.crud.wallet import add_into_wallet, get_wallet
+from app.dependancies.database import db_dependancy
+from app.dependancies.auth import current_user
 
 
 router_wallet = APIRouter(
@@ -26,7 +26,7 @@ async def deposit_into(
 @router_wallet.get("/{user_id}")
 async def get_user_wallet(
     user_id: int, db: db_dependancy, current_user: current_user
-) -> dict:
+) -> dict[str, WalletOut | CurrentUser]:
     wallet = await get_wallet(user_id, db)
     user = await get_user(user_id, db)
     if not wallet:

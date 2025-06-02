@@ -1,14 +1,14 @@
 from decimal import Decimal
 from sqlalchemy import desc, insert, select, update
-from models.user import Users
-from models.transaction import Transactions
-from schemas.transactions import TransactionIn
-from models.wallet import Wallets
+from app.models.user import Users
+from app.models.transaction import Transactions
+from app.schemas.transactions import TransactionIn
+from app.models.wallet import Wallets
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
 
-async def transfer(sender_id, reciever_id, amount, db) -> bool:
+async def transfer(sender_id: int, reciever_id: int, amount: float, db: AsyncSession) -> bool:
     try:
         stmt1 = (
             update(Wallets)

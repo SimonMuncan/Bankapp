@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
+from typing import Annotated, Any
 
 import jwt
 from fastapi import Depends, HTTPException, Request
 from starlette import status
 from starlette.responses import Response, JSONResponse
-from schemas.user import CurrentUser
-from core.auth import oauth2_bearer, OAUTH_ALGORITHM, OAUTH_SECRET_KEY
+from app.schemas.user import CurrentUser
+from app.core.auth import oauth2_bearer, OAUTH_ALGORITHM, OAUTH_SECRET_KEY
 
 
 def create_access_token(
@@ -45,7 +45,7 @@ async def get_current_user(
     return CurrentUser(id=user_id, email=email, name=name)
 
 
-async def auth_middleware(request: Request, call_next) -> Response:
+async def auth_middleware(request: Request, call_next) -> Response | Any:
     public_routes = {
         "/",
         "/token",

@@ -26,7 +26,7 @@ class Transactions(Base):
         "Users", foreign_keys=[receiver_id], back_populates="received_transactions"
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"""<Event(
             id='{self.id}',
             sender_id='{self.sender_id}',

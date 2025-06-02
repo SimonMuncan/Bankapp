@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from crud.transaction import get_all_transactions, log_transaction, transfer
-from crud.wallet import get_wallet
-from crud.user import get_user
-from schemas.transactions import TransactionIn, TransactionName
-from dependancies.database import db_dependancy
-from dependancies.auth import current_user
+from app.crud.transaction import get_all_transactions, log_transaction, transfer
+from app.crud.wallet import get_wallet
+from app.crud.user import get_user
+from app.schemas.transactions import TransactionIn, TransactionName
+from app.dependancies.database import db_dependancy
+from app.dependancies.auth import current_user
 
 router_transaction = APIRouter(
     prefix="/transactions",
@@ -16,8 +16,8 @@ router_transaction = APIRouter(
 async def get_transactions(
     db: db_dependancy,
     current_user: current_user,
-    limit=10,
-    offset=0,
+    limit: int = 10,
+    offset: int = 0,
 ) -> list[TransactionName]:
     transactions_list = await get_all_transactions(current_user.id, limit, offset, db)
     if not transactions_list:
@@ -44,7 +44,7 @@ async def get_transactions(
 @router_transaction.patch("/transfer-money", status_code=200)
 async def transfer_money(
     reciever_user_id: int, amount: float, db: db_dependancy, current_user: current_user
-) -> dict:
+) -> dict[str, str]:
     reciever_user = await get_user(reciever_user_id, db)
     if not reciever_user:
         raise HTTPException(status_code=404, detail="User not found")
