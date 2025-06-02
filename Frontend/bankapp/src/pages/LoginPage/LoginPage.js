@@ -10,6 +10,7 @@ import {
     loginFailure,
     clearAuthError
 } from '../../store/actions/authActions';
+import InputLogin from '../../components/InputLogin';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -64,36 +65,10 @@ const LoginPage = () => {
                 <form onSubmit={handleSubmit} className={styles.authForm}>
                     {reduxError && <p className={styles.errorMessage}>{reduxError}</p>}
                     <div className={styles.formGroup}>
-                        <label htmlFor="email" className={styles.formLabel}>Email Address</label>
-                        <input
-                            type="email"
-                            id="email"
-                            className={styles.formInput}
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                                if(reduxError) dispatch(clearAuthError());
-                            }}
-                            required
-                            placeholder="you@example.com"
-                            disabled={loading}
-                        />
+                        <InputLogin id="email" type="email" value={email} set={setEmail} title="Email" placeHolder="you@example.com" isLoading={loading} dispatch={dispatch} reduxError={reduxError} clearAuthError={clearAuthError}/>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="password" className={styles.formLabel}>Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            className={styles.formInput}
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                if(reduxError) dispatch(clearAuthError());
-                            }}
-                            required
-                            placeholder="••••••••"
-                            disabled={loading}
-                        />
+                        <InputLogin id="password" type="password" value={password} set={setPassword} title="Password" placeHolder="••••••••" isLoading={loading} dispatch={dispatch} reduxError={reduxError} clearAuthError={clearAuthError}/>
                     </div>
                     <button type="submit" className={styles.authButton} disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
