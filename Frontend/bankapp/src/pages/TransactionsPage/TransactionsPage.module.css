@@ -256,6 +256,25 @@
     font-weight: 500;
     color: #333;
 }
+.checkboxGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.checkboxInput {
+  margin-right: 5px; 
+}
+
+.checkboxLabel {
+  font-size: 0.9rem;
+}
 
 @keyframes fadeInBackground {
     from { opacity: 0; }

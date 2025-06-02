@@ -42,10 +42,16 @@ async def log_transaction(transaction_data: TransactionIn, db: AsyncSession) -> 
 
 
 async def get_all_transactions(
-    query: str, user_id: int, limit: int, offset: int, db: AsyncSession
-) -> list[tuple[Transactions, str, str]]:
+        query: str,
+        user_id: int,
+        limit: int,
+        offset: int,
+        db: AsyncSession, 
+        transaction_type_filter: str, 
+    ) -> list[tuple[Transactions, str, str]]:
     Sender = aliased(Users)
     Receiver = aliased(Users)
+    
     base_stmt = (
         select(
             Transactions,
@@ -59,6 +65,11 @@ async def get_all_transactions(
         )
     )
 
+    if transaction_type_filter == 'incoming':
+        base_stmt = base_stmt.where(Transactions.receiver_id == user_id)
+    elif transaction_type_filter == 'outgoing':
+        base_stmt = base_stmt.where(Transactions.sender_id == user_id)
+
     if not query:
         final_stmt = (
             base_stmt
@@ -68,9 +79,9 @@ async def get_all_transactions(
         )
     else:
         final_stmt = (
-            base_stmt
-            .where(
-                (Sender.name.icontains(query)) | (Receiver.name.icontains(query) | (Transactions.description.icontains(query)))
+            base_stmt 
+            .where( 
+                (Sender.name.icontains(query)) | (Receiver.name.icontains(query))
             )
             .order_by(desc(Transactions.timestamp))
             .limit(limit=limit)

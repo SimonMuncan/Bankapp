@@ -27,10 +27,22 @@ const Transactions = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilters, setTypeFilters] = useState({
+        incoming: false,
+        outgoing: false,
+    });
     const { user } = useSelector(state => state.auth);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const activeUserId = user.id;
-    const fetchUserTransactions = useCallback(async (query, userId, page) => {
+
+    let transactionTypeParam = 'all'; 
+    if (typeFilters.incoming && !typeFilters.outgoing) {
+        transactionTypeParam = 'incoming';
+    } else if (!typeFilters.incoming && typeFilters.outgoing) {
+        transactionTypeParam = 'outgoing';
+    }
+
+    const fetchUserTransactions = useCallback(async (query, userId, page, currentTransactionType) => {
         if (!userId) {
             setTransactions([]);
             setIsLastPage(true); 
@@ -41,8 +53,9 @@ const Transactions = () => {
         setError(null); 
         const offset = (page - 1) * ITEMS_PER_PAGE;
 
+        
         try {
-            const response = await getTransactions(query, userId, ITEMS_PER_PAGE, offset);
+            const response = await getTransactions(query, userId, ITEMS_PER_PAGE, offset, currentTransactionType);
             if (Array.isArray(response)) {
                 setTransactions(response);
                 setIsLastPage(response.length < ITEMS_PER_PAGE); 
@@ -64,9 +77,9 @@ const Transactions = () => {
 
     useEffect(() => {
         if (activeUserId) {
-            fetchUserTransactions(debouncedSearchTerm, activeUserId, currentPage);
+            fetchUserTransactions(debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam);
         }
-    }, [debouncedSearchTerm, activeUserId, currentPage, fetchUserTransactions]) 
+    }, [debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam, fetchUserTransactions]);
 
 
     const handlePreviousPage = () => {
@@ -77,6 +90,14 @@ const Transactions = () => {
         setCurrentPage(prevPage => prevPage + 1);
     };
 
+    const handleTypeFilterChange = (event) => {
+    const { name, checked } = event.target;
+        setTypeFilters(prevFilters => ({
+            ...prevFilters,
+            [name]: checked,
+        }));
+        setCurrentPage(1); 
+    };
 
     return (
         <div className={styles.transactionsContainer}>
@@ -90,7 +111,34 @@ const Transactions = () => {
                     <div className={styles.leftPanel}>
                         <div className={styles.card}>
                             <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchTitle="Find Transactions" searchLabel="Search transactions" searchPlaceholder="Marko"/>
-                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" />
+                            <div className={styles.formGroup}> 
+                                <label className={styles.label}>Filter by type:</label>
+                                <div className={styles.checkboxGroup}>
+                                    <div className={styles.checkboxWrapper}>
+                                        <input
+                                            type="checkbox"
+                                            id="filterIncoming"
+                                            name="incoming"
+                                            checked={typeFilters.incoming}
+                                            onChange={handleTypeFilterChange}
+                                            className={styles.checkboxInput}
+                                        />
+                                        <label htmlFor="filterIncoming" className={styles.checkboxLabel}>Incoming</label> 
+                                    </div>
+                                    <div className={styles.checkboxWrapper}>
+                                        <input
+                                            type="checkbox"
+                                            id="filterOutgoing"
+                                            name="outgoing"
+                                            checked={typeFilters.outgoing}
+                                            onChange={handleTypeFilterChange}
+                                            className={styles.checkboxInput}
+                                        />
+                                        <label htmlFor="filterOutgoing" className={styles.checkboxLabel}>Outgoing</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
                         </div>
                     </div>
                 </div>

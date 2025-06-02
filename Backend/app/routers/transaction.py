@@ -1,3 +1,4 @@
+from enum import Enum
 import io
 from fastapi import APIRouter, HTTPException, Query
 from app.services.transactions import PDF
@@ -15,16 +16,29 @@ router_transaction = APIRouter(
     tags=["Transactions"],
 )
 
+class TransactionTypeFilter(str, Enum):
+    all = "all"
+    incoming = "incoming"
+    outgoing = "outgoing"
 
 @router_transaction.get("/{user_id}")
 async def get_transactions(
-    query: str,
     db: db_dependancy,
     current_user: current_user,
-    limit: int = 10,
-    offset: int = 0,
+    query: str = Query("", description="Search query for filtering transactions by name"),
+    limit: int = Query(10, ge=1, le=100), 
+    offset: int = Query(0, ge=0),
+    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type") 
+
 ) -> list[TransactionName]:
-    transactions_list = await get_all_transactions(query, current_user.id, limit, offset, db)
+    transactions_list = await get_all_transactions(
+            query=query, 
+            user_id=current_user.id, 
+            limit=limit, 
+            offset=offset, 
+            db=db, 
+            transaction_type_filter=transaction_type.value 
+        )
     if not transactions_list:
         return []
 
@@ -83,14 +97,23 @@ async def transfer_money(
 
 
 
-@router_transaction.get("/{user_id}/export/pdf", response_class=StreamingResponse)
+@router_transaction.get("/export/pdf/{user_id}", response_class=StreamingResponse)
 async def export_transactions_pdf(
     db: db_dependancy,
     current_user: current_user,
     query: str = Query("", description="Search query for filtering transactions by name"),
+    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type"),
+
 ):
     
-    transactions_data_tuples = await get_all_transactions(query, current_user.id, limit=10000, offset=0, db=db) 
+    transactions_data_tuples = await get_all_transactions(
+            query=query, 
+            user_id=current_user.id, 
+            limit=10000, 
+            offset=0, 
+            db=db, 
+            transaction_type_filter=transaction_type.value 
+        ) 
     
     if not transactions_data_tuples:
         raise HTTPException(status_code=404, detail="No transactions found to export.")

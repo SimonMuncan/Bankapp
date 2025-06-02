@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styles from '../pages/TransactionsPage/TransactionsPage.module.css'; 
 import {getTransactionsPDF} from '../services/transactionsService';
 
-const ExportPDF = ({ isLoading, debouncedSearchTerm, activeUserId, setError, title}) => {
+const ExportPDF = ({ isLoading, debouncedSearchTerm, activeUserId, setError, title, transactionType}) => {
     const [isExporting, setIsExporting] = useState(false);
 
     const handleExportPDF = async () => {
@@ -15,7 +15,7 @@ const ExportPDF = ({ isLoading, debouncedSearchTerm, activeUserId, setError, tit
 
     try {
 
-        const responseBlob = await getTransactionsPDF(debouncedSearchTerm, activeUserId);
+        const responseBlob = await getTransactionsPDF(debouncedSearchTerm, activeUserId, transactionType);
 
         const url = window.URL.createObjectURL(new Blob([responseBlob]));
         const link = document.createElement('a');

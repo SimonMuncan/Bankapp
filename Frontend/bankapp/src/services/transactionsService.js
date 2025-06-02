@@ -1,9 +1,15 @@
 import axios from './api'; 
 
-export const getTransactions = async (query, userId, limit, offset) => {
+export const getTransactions = async (query, userId, limit, offset, transactionType) => {
     try {
-        const response = await axios.get(`/transactions/${userId}?query=${query}&limit=${limit}&offset=${offset}`);
-        return response.data; 
+        const params = {
+            query: query || "",
+            limit: limit,
+            offset: offset,
+            transaction_type: transactionType, 
+            };
+            const response = await axios.get(`/transactions/${userId}`, { params });
+            return response.data; 
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.detail || `Server error: ${error.response.status}`);
@@ -15,12 +21,13 @@ export const getTransactions = async (query, userId, limit, offset) => {
     }
 };
 
-export const getTransactionsPDF = async (query, userId) => {
+export const getTransactionsPDF = async (query, userId, transactionType) => {
   try {
     const params = {
-      query: query || "", 
+      query: query || "",
+      transaction_type: transactionType, 
     };
-    const response = await axios.get(`/transactions/${userId}/export/pdf`, { 
+    const response = await axios.get(`/transactions/export/pdf/${userId}`, { 
       params: params,
       responseType: 'blob', 
     });
