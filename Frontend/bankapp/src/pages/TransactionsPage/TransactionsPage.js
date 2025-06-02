@@ -3,6 +3,7 @@ import { getTransactions } from '../../services/transactionsService';
 import styles from './TransactionsPage.module.css'; 
 import { useSelector } from 'react-redux'; 
 import Search from "../../components/Search";
+import ExportPDF from "../../components/ExportPDF";
 
 function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -85,7 +86,14 @@ const Transactions = () => {
             </div>
 
             <div className={styles.mainContentGrid}>
-                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchTitle="Find Transactions" searchLabel="Search transactions" searchPlaceholder="Marko"/>
+                <div className={styles.mainContentGrid}>
+                    <div className={styles.leftPanel}>
+                        <div className={styles.card}>
+                            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchTitle="Find Transactions" searchLabel="Search transactions" searchPlaceholder="Marko"/>
+                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" />
+                        </div>
+                    </div>
+                </div>
                 <div className={styles.rightPanel}>
                     <div className={`${styles.card} ${styles.transactionsCard}`}>
                         <h3 className={styles.cardTitle}>Recent Transactions</h3>

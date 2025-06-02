@@ -1,10 +1,14 @@
-from fastapi import APIRouter, HTTPException
+import io
+from fastapi import APIRouter, HTTPException, Query
+from app.services.transactions import PDF
 from app.crud.transaction import get_all_transactions, log_transaction, transfer
 from app.crud.wallet import get_wallet
 from app.crud.user import get_user
 from app.schemas.transactions import TransactionIn, TransactionName
 from app.dependancies.database import db_dependancy
 from app.dependancies.auth import current_user
+from starlette.responses import StreamingResponse
+
 
 router_transaction = APIRouter(
     prefix="/transactions",
@@ -76,3 +80,58 @@ async def transfer_money(
         raise HTTPException(status_code=400, detail="Transaction failed")
     await log_transaction(trans, db)
     return {"detail": "Transfer successful"}
+
+
+
+@router_transaction.get("/{user_id}/export/pdf", response_class=StreamingResponse)
+async def export_transactions_pdf(
+    db: db_dependancy,
+    current_user: current_user,
+    query: str = Query("", description="Search query for filtering transactions by name"),
+):
+    
+    transactions_data_tuples = await get_all_transactions(query, current_user.id, limit=10000, offset=0, db=db) 
+    
+    if not transactions_data_tuples:
+        raise HTTPException(status_code=404, detail="No transactions found to export.")
+
+    pdf_data = []
+    for transaction_obj, sender_name, receiver_name in transactions_data_tuples:
+        amount_str = f"- ${float(transaction_obj.amount):.2f}" if transaction_obj.sender_id == current_user.id else f"+ ${float(transaction_obj.amount):.2f}"
+        type_str = "Outgoing" if transaction_obj.sender_id == current_user.id else "Incoming"
+        timestamp_str = str(transaction_obj.timestamp.strftime('%Y-%m-%d %H:%M:%S')) if transaction_obj.timestamp else "N/A" 
+
+        pdf_data.append({
+            "sender": sender_name,
+            "receiver": receiver_name,
+            "amount_display": amount_str,
+            "type": type_str,
+            "timestamp_display": timestamp_str,
+            "status_display": "Successful" if transaction_obj.status else "Failed",
+            "description": transaction_obj.description or "-",
+        })
+
+    pdf = PDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.chapter_title("Transaction Details")
+    
+    headers = ["Sender", "Receiver", "Amount", "Type", "Date & Time", "Status", "Description"]
+    pdf.chapter_body(pdf_data, headers, user_name=current_user.name) 
+
+    pdf_output_content = pdf.output(dest='S') 
+
+    if isinstance(pdf_output_content, str):
+        pdf_bytes = pdf_output_content.encode('latin-1')
+    elif isinstance(pdf_output_content, (bytes, bytearray)):
+        pdf_bytes = bytes(pdf_output_content) 
+    else:
+        raise TypeError("Unexpected PDF output type from FPDF library")
+
+    pdf_file_like_object = io.BytesIO(pdf_bytes)     
+
+    return StreamingResponse(
+        pdf_file_like_object, 
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename=transactions_{current_user.id}.pdf"}
+    )

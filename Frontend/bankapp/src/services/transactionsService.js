@@ -14,3 +14,19 @@ export const getTransactions = async (query, userId, limit, offset) => {
         }
     }
 };
+
+export const getTransactionsPDF = async (query, userId) => {
+  try {
+    const params = {
+      query: query || "", 
+    };
+    const response = await axios.get(`/transactions/${userId}/export/pdf`, { 
+      params: params,
+      responseType: 'blob', 
+    });
+    return response.data; 
+  } catch (error) {
+    console.error('Error fetching PDF transactions:', error.response || error.message);
+    throw error; 
+  }
+};
