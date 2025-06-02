@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Search from "../../components/Search";
 import ExportPDF from "../../components/ExportPDF";
 import Checkbox from "../../components/Chckbox";
+import PaginationControls from "../../components/Pagination";
 
 function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -122,8 +123,17 @@ const Transactions = () => {
                             <p className={styles.loadingMessage}>Loading transactions...</p>
                         ) : error ? (
                             <p className={styles.errorMessage}>Error: {error}</p>
-                        ) : transactions.length === 0 && activeUserId ? (
-                            <p className={styles.noDataMessage}>No transactions found for User: {user.name}.</p>
+                        ) : transactions.length === 0 ? (
+                            <>
+                                <p className={styles.noDataMessage}>No transactions found for User: {user.name}.</p>
+                                <PaginationControls
+                                        currentPage={currentPage}
+                                        handlePreviousPage={handlePreviousPage}
+                                        handleNextPage={handleNextPage}
+                                        isLoading={isLoading}
+                                        isLastPage={isLastPage}
+                                    />
+                            </>
                         ) : (
                             <>
                                 <div className={styles.tableWrapper}>
@@ -158,23 +168,13 @@ const Transactions = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className={styles.paginationControls}>
-                                    <button
-                                        onClick={handlePreviousPage}
-                                        disabled={isLoading || currentPage === 1}
-                                        className={styles.paginationButton}
-                                    >
-                                        &larr; Previous
-                                    </button>
-                                    <span className={styles.pageIndicator}>Page {currentPage}</span>
-                                    <button
-                                        onClick={handleNextPage}
-                                        disabled={isLoading || isLastPage}
-                                        className={styles.paginationButton}
-                                    >
-                                        Next &rarr;
-                                    </button>
-                                </div>
+                                <PaginationControls
+                                    currentPage={currentPage}
+                                    handlePreviousPage={handlePreviousPage}
+                                    handleNextPage={handleNextPage}
+                                    isLoading={isLoading}
+                                    isLastPage={isLastPage}
+                                />
                             </>
                         )}
                     </div>
