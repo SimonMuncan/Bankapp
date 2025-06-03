@@ -8,5 +8,7 @@ app/schemas/__pycache__
 app/services/__pycache__
 migrations/__pycache__
 migrations/versions/__pycache__
+tests/__pycache__
+tests/.pytest_cache
 .env
 .mypy_cache
