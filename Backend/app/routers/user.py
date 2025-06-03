@@ -5,6 +5,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.services.authentification import create_access_token
 from app.crud.user import authenticate_user, create_new_user, get_user_email, update_user
 from app.schemas.user import OAuth2TokenResponse, UserIn, UserUpdate
+from app.crud.user import authenticate_user, create_new_user, get_user_email
+from app.schemas.user import OAuth2TokenResponse, UserIn
 from app.dependancies.database import db_dependancy
 from starlette import status
 from app.dependancies.auth import current_user

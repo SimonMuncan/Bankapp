@@ -3,6 +3,7 @@ from enum import Enum
 import io
 from fastapi import APIRouter, HTTPException, Query
 from app.services.transactions import PDF
+from fastapi import APIRouter, HTTPException
 from app.crud.transaction import get_all_transactions, log_transaction, transfer
 from app.crud.wallet import get_wallet
 from app.crud.user import get_user
@@ -10,6 +11,7 @@ from app.schemas.transactions import TransactionIn, TransactionName
 from app.dependancies.database import db_dependancy
 from app.dependancies.auth import current_user
 from starlette.responses import StreamingResponse
+
 
 
 router_transaction = APIRouter(
@@ -31,6 +33,8 @@ async def get_transactions(
     offset: int = Query(0, ge=0),
     transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type") 
 
+    limit: int = 10,
+    offset: int = 0,
 ) -> list[TransactionName]:
     transactions_list = await get_all_transactions(
             query=query, 
