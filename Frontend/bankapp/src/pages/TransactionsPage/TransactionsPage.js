@@ -2,6 +2,23 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getTransactions } from '../../services/transactionsService';
 import styles from './TransactionsPage.module.css'; 
 import { useSelector } from 'react-redux'; 
+import Search from "../../components/Search";
+import ExportPDF from "../../components/ExportPDF";
+import Checkbox from "../../components/Chckbox";
+import PaginationControls from "../../components/Pagination";
+
+function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+    return debouncedValue;
+}
 
 const ITEMS_PER_PAGE = 10;
 
@@ -11,10 +28,23 @@ const Transactions = () => {
     const [isLastPage, setIsLastPage] = useState(false);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilters, setTypeFilters] = useState({
+        incoming: false,
+        outgoing: false,
+    });
     const { user } = useSelector(state => state.auth);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    const activeUserId = user.id;
 
-    const activeUserId = user.id
-    const fetchUserTransactions = useCallback(async (userId, page) => {
+    let transactionTypeParam = 'all'; 
+    if (typeFilters.incoming && !typeFilters.outgoing) {
+        transactionTypeParam = 'incoming';
+    } else if (!typeFilters.incoming && typeFilters.outgoing) {
+        transactionTypeParam = 'outgoing';
+    }
+
+    const fetchUserTransactions = useCallback(async (query, userId, page, currentTransactionType) => {
         if (!userId) {
             setTransactions([]);
             setIsLastPage(true); 
@@ -25,8 +55,9 @@ const Transactions = () => {
         setError(null); 
         const offset = (page - 1) * ITEMS_PER_PAGE;
 
+        
         try {
-            const response = await getTransactions(userId, ITEMS_PER_PAGE, offset);
+            const response = await getTransactions(query, userId, ITEMS_PER_PAGE, offset, currentTransactionType);
             if (Array.isArray(response)) {
                 setTransactions(response);
                 setIsLastPage(response.length < ITEMS_PER_PAGE); 
@@ -47,10 +78,10 @@ const Transactions = () => {
     }, []);
 
     useEffect(() => {
-        if (activeUserId) { 
-            fetchUserTransactions(activeUserId, currentPage);
+        if (activeUserId) {
+            fetchUserTransactions(debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam);
         }
-    }, [activeUserId, currentPage, fetchUserTransactions]); 
+    }, [debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam, fetchUserTransactions]);
 
 
     const handlePreviousPage = () => {
@@ -70,6 +101,19 @@ const Transactions = () => {
             </div>
 
             <div className={styles.mainContentGrid}>
+                <div className={styles.mainContentGrid}>
+                    <div className={styles.leftPanel}>
+                        <div className={styles.card}>
+                            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchTitle="Find Transactions" searchLabel="Search transactions" searchPlaceholder="Marko"/>
+                            <div className={styles.formGroup}> 
+                                <label className={styles.label}>Filter by type:</label>
+                                <div className={styles.checkboxGroup}>
+                                    <Checkbox id="filterIncoming" name="incoming" checked={typeFilters.incoming} setTypeFilters={setTypeFilters} setCurrentPage={setCurrentPage}/>
+                                    <Checkbox id="filterOutgoing" name="outgoing" checked={typeFilters.outgoing} setTypeFilters={setTypeFilters} setCurrentPage={setCurrentPage}/>
+                                </div>
+                            </div>
+                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
+                        </div>
                 <div className={styles.leftPanel}>
                     <div className={styles.card}>
                         <h3 className={styles.cardTitle}>Find Transactions</h3>
@@ -93,7 +137,6 @@ const Transactions = () => {
                         </button>
                     </div>
                 </div>
-
                 <div className={styles.rightPanel}>
                     <div className={`${styles.card} ${styles.transactionsCard}`}>
                         <h3 className={styles.cardTitle}>Recent Transactions</h3>
@@ -101,10 +144,17 @@ const Transactions = () => {
                             <p className={styles.loadingMessage}>Loading transactions...</p>
                         ) : error ? (
                             <p className={styles.errorMessage}>Error: {error}</p>
-                        ) : transactions.length === 0 && activeUserId ? (
-                            <p className={styles.noDataMessage}>No transactions found for User ID: {activeUserId}.</p>
-                        ) : transactions.length === 0 && !activeUserId ? (
-                            <p className={styles.noDataMessage}>Enter a user ID to view transactions.</p>
+                        ) : transactions.length === 0 ? (
+                            <>
+                                <p className={styles.noDataMessage}>No transactions found for User: {user.name}.</p>
+                                <PaginationControls
+                                        currentPage={currentPage}
+                                        handlePreviousPage={handlePreviousPage}
+                                        handleNextPage={handleNextPage}
+                                        isLoading={isLoading}
+                                        isLastPage={isLastPage}
+                                    />
+                            </>
                         ) : (
                             <>
                                 <div className={styles.tableWrapper}>
@@ -139,23 +189,13 @@ const Transactions = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className={styles.paginationControls}>
-                                    <button
-                                        onClick={handlePreviousPage}
-                                        disabled={isLoading || currentPage === 1}
-                                        className={styles.paginationButton}
-                                    >
-                                        &larr; Previous
-                                    </button>
-                                    <span className={styles.pageIndicator}>Page {currentPage}</span>
-                                    <button
-                                        onClick={handleNextPage}
-                                        disabled={isLoading || isLastPage}
-                                        className={styles.paginationButton}
-                                    >
-                                        Next &rarr;
-                                    </button>
-                                </div>
+                                <PaginationControls
+                                    currentPage={currentPage}
+                                    handlePreviousPage={handlePreviousPage}
+                                    handleNextPage={handleNextPage}
+                                    isLoading={isLoading}
+                                    isLastPage={isLastPage}
+                                />
                             </>
                         )}
                     </div>

@@ -1,3 +1,8 @@
+from sqlalchemy import insert, select, update
+from app.models.user import Users
+from app.models.wallet import Wallets
+from app.schemas.user import UserIn, UserUpdate
+
 from sqlalchemy import insert, select
 from app.models.user import Users
 from app.models.wallet import Wallets
@@ -55,4 +60,31 @@ async def get_user_email(user_email: str, db: AsyncSession) -> Users | None:
 async def get_user(user_id: int, db: AsyncSession) -> Users | None:
     stmt = select(Users).where(Users.id == user_id)
     result = await db.execute(stmt)
+    return result.scalar_one_or_none()
+
+
+async def update_user(user_id: int, user_to_update: UserUpdate, db: AsyncSession) -> Users | None:
+    update_values = {}
+    provided_data = user_to_update.model_dump(exclude_unset=True) 
+
+    if "name" in provided_data: 
+        update_values["name"] = provided_data["name"] 
+
+    if "email" in provided_data: 
+        update_values["email"] = provided_data["email"] 
+  
+    if user_to_update.password is not None:
+        password_value = user_to_update.password.get_secret_value()
+        if password_value: 
+            update_values["hashed_password"] = get_password_hash(password_value)
+
+    stmt = (
+        update(Users)
+        .where(Users.id == user_id)
+        .values(**update_values)
+        .returning(Users)
+    )
+    
+    result = await db.execute(stmt)
+    await db.commit()
     return result.scalar_one_or_none()

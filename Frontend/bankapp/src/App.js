@@ -11,6 +11,7 @@ import Transactions from './pages/TransactionsPage/TransactionsPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />}/> 
+        <Route path="/register" element={<RegisterPage />}/>
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
+            <Route path='/profile' element={<ProfilePage />}/> 
             <Route path="/wallet" element={<WalletPage />} />
             <Route path="/deposit" element={<DepositPage />} />
             <Route path="/transfer" element={<TransferPage />} />

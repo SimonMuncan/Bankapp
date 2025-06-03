@@ -54,7 +54,10 @@ function NavbarComponent() {
           <Navbar.Text className={`${styles.navbarLogInText} ms-auto`}>
             {isAuthenticated && user ? (
               <>
-                Signed in as: {user.name}
+                Signed in as:
+                <Link to="/profile" className={styles.authLink}>
+                  {user.name}
+                </Link>
                 <Link onClick={handleLogout} className={`${styles.authLink} ${styles.logoutButton} ms-2`}>
                   Logout
                 </Link>

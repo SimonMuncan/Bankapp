@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegistarPage.module.css'; 
 import { registerService } from '../../services/registerService';
+import InputRegister from "../../components/InputRegister";
 
 
 const RegisterPage = () => {
@@ -73,56 +74,16 @@ const RegisterPage = () => {
                     {error && <p className={styles.errorMessage}>{error}</p>}
                     {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
                     <div className={styles.formGroup}>
-                        <label htmlFor="username" className={styles.formLabel}>Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            className={styles.formInput}
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            placeholder="Choose a username"
-                            disabled={isLoading}
-                        />
+                        <InputRegister id="username" type="text" value={username} set={setUsername} title="Username" placeHolder="Choose a username" isLoading={isLoading}/>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="email" className={styles.formLabel}>Email Address</label>
-                        <input
-                            type="email"
-                            id="email"
-                            className={styles.formInput}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="you@example.com"
-                            disabled={isLoading}
-                        />
+                        <InputRegister id="email" type="email" value={email} set={setEmail} title="Email Address" placeHolder="you@example.com" isLoading={isLoading}/>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="password" className={styles.formLabel}>Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            className={styles.formInput}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="Create a strong password"
-                            disabled={isLoading}
-                        />
+                        <InputRegister id="password" type="password" value={password} set={setPassword} title="Password" placeHolder="Create a strong password" isLoading={isLoading}/>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="confirmPassword" className={styles.formLabel}>Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            className={styles.formInput}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                            placeholder="Repeat your password"
-                            disabled={isLoading}
-                        />
+                        <InputRegister id="confirmPassword" type="password" value={confirmPassword} set={setConfirmPassword} title="Confirm Password" placeHolder="Repeat your password" isLoading={isLoading}/>
                     </div>
                     <button type="submit" className={styles.authButton} disabled={isLoading}>
                         {isLoading ? 'Registering...' : 'Register'}

@@ -20,7 +20,10 @@ const HomePage = () => {
         <div className={styles.navbarLogInText}>
           {isAuthenticated && user ? (
             <>
-              Signed in as: {user.name}
+              <span className={styles.signedInText}>Signed in as:</span>
+              <Link to="/profile" className={styles.authLink}>
+                {user.name}
+              </Link>
               <Link onClick={handleLogout} className={`${styles.authLink} ${styles.logoutButton} ms-2`}>
                 Logout
               </Link>
