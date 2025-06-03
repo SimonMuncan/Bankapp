@@ -5,6 +5,7 @@ import {
     LOGIN_FAILURE,
     LOGOUT,
     CLEAR_AUTH_ERROR,
+    UPDATE_USER_PROFILE_SUCCESS,
 } from '../actions/authActionTypes';
 
 let initialUser = null;
@@ -79,6 +80,14 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: null,
+            };
+        case UPDATE_USER_PROFILE_SUCCESS:
+            return {
+                ...state,
+                user: {
+                ...state.user, 
+                ...action.payload, 
+                },
             };
         default:
             return state;

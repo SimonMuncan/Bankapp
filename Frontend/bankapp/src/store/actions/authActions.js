@@ -5,6 +5,7 @@ import {
     LOGIN_FAILURE,
     LOGOUT,
     CLEAR_AUTH_ERROR,
+    UPDATE_USER_PROFILE_SUCCESS,
 } from './authActionTypes';
 
 
@@ -44,3 +45,9 @@ export const clearAuthError = () => ({
     type: CLEAR_AUTH_ERROR,
 });
 
+export const updateUserProfileSuccess = (updatedUserData) => {
+  return {
+    type: UPDATE_USER_PROFILE_SUCCESS,
+    payload: updatedUserData,
+  };
+};

@@ -1,18 +1,11 @@
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 
-MIN_PASSWORD_LENGTH = 8
-
 
 class UserIn(BaseModel):
     name: str
     email: EmailStr
-    password: SecretStr = Field(
-        min_length=MIN_PASSWORD_LENGTH,
-        description=f"Password must be at least {MIN_PASSWORD_LENGTH}"
-        " characters long and include at least one number and"
-        " one special character.",
-    )
+    password: SecretStr 
 
 
 class UserOut(UserIn):
@@ -31,3 +24,9 @@ class OAuth2TokenResponse(BaseModel):
     expires_in: int | None = None
     refresh_token: str | None = None
     scope: str | None = None
+
+
+class UserUpdate(BaseModel):
+    name: str | None = None
+    email: EmailStr | None = None
+    password: SecretStr | None = None
