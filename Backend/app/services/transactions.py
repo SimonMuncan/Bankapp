@@ -1,9 +1,16 @@
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from fpdf import FPDF  # type: ignore
 
 class PDF(FPDF):
     def header(self):
         self.set_font("Arial", "B", 12)
-        self.cell(0, 10, "Transaction Report", 0, 1, "C")
+        self.cell(0, 10, "Transaction Report", 0, 0, "C") 
+        current_x = self.get_x()
+        current_y = self.get_y()
+        self.chapter_date() 
+        self.set_xy(current_x, current_y) 
+        self.ln(10)
 
     def footer(self):
         self.set_y(-15)
@@ -14,6 +21,16 @@ class PDF(FPDF):
         self.set_font("Arial", "B", 12)
         self.cell(0, 10, title, 0, 1, "L")
         self.ln(5)
+    
+    def chapter_date(self):
+        date_to_display = datetime.now(ZoneInfo("Europe/Belgrade")).strftime("%Y-%m-%d %H:%M:%S")
+        self.set_font("Arial", "I", 8) 
+        date_width = self.get_string_width(date_to_display) + 2 
+        page_width = self.w
+        right_margin = self.r_margin
+        x_position = page_width - right_margin - date_width
+        self.set_x(x_position)
+        self.cell(date_width, 10, date_to_display, 0, 0, "R")
 
     def chapter_body(self, data, headers, user_name: str):
         self.set_font("Arial", "", 10)
