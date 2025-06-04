@@ -18,10 +18,6 @@ router_transaction = APIRouter(
     tags=["Transactions"],
 )
 
-class TransactionTypeFilter(str, Enum):
-    all = "all"
-    incoming = "incoming"
-    outgoing = "outgoing"
 
 class TransactionTypeFilter(str, Enum):
     all = "all"

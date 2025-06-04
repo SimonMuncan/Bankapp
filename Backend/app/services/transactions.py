@@ -59,7 +59,7 @@ class PDF(FPDF):
             self.cell(
                 col_widths.get(header, 30), 7, header, 1, 0, "C", fill=is_first_header
             )
-
+        self.ln()
 
         for row in data:
             self.cell(col_widths.get("Sender", 30), 6, str(row.get("sender", "-")), 1)

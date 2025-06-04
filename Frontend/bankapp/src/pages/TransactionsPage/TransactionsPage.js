@@ -114,27 +114,6 @@ const Transactions = () => {
                             </div>
                             <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
                         </div>
-                <div className={styles.leftPanel}>
-                    <div className={styles.card}>
-                        <h3 className={styles.cardTitle}>Find Transactions</h3>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="userIdInput" className={styles.label}>Search transaction:</label>
-                            <input
-                                id="userIdInput"
-                                type="number"
-                                value=""
-                                placeholder="e.g., 123"
-                                min="1"
-                                className={styles.inputField}
-                                disabled={true}
-                            />
-                        </div>
-                        <button
-                            disabled="true"
-                            className={styles.button}
-                        >
-                            {isLoading && activeUserId ? 'Loading...' : 'Find Transactions'}
-                        </button>
                     </div>
                 </div>
                 <div className={styles.rightPanel}>
