@@ -1,11 +1,10 @@
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 
-
 class UserIn(BaseModel):
     name: str
     email: EmailStr
-    password: SecretStr 
+    password: SecretStr
 
 
 class UserOut(UserIn):

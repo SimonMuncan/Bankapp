@@ -34,8 +34,10 @@ if not effective_db_url:
             "DATABASE_URL environment variable is not set and sqlalchemy.url "
             "is not configured in alembic.ini. Alembic cannot determine database URL."
         )
-    print(f"Warning: DATABASE_URL environment variable not set. Alembic using "
-          f"sqlalchemy.url from alembic.ini: {effective_db_url}")
+    print(
+        f"Warning: DATABASE_URL environment variable not set. Alembic using "
+        f"sqlalchemy.url from alembic.ini: {effective_db_url}"
+    )
 
 # Override the sqlalchemy.url from alembic.ini with the effective URL
 config.set_main_option("sqlalchemy.url", effective_db_url)

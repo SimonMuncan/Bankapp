@@ -13,7 +13,6 @@ from app.dependancies.auth import current_user
 from starlette.responses import StreamingResponse
 
 
-
 router_transaction = APIRouter(
     prefix="/transactions",
     tags=["Transactions"],
@@ -24,26 +23,34 @@ class TransactionTypeFilter(str, Enum):
     incoming = "incoming"
     outgoing = "outgoing"
 
+class TransactionTypeFilter(str, Enum):
+    all = "all"
+    incoming = "incoming"
+    outgoing = "outgoing"
+
+
 @router_transaction.get("/{user_id}")
 async def get_transactions(
     db: db_dependancy,
     current_user: current_user,
-    query: str = Query("", description="Search query for filtering transactions by name"),
-    limit: int = Query(10, ge=1, le=100), 
+    query: str = Query(
+        "", description="Search query for filtering transactions by name"
+    ),
+    limit: int = Query(10, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type") 
-
-    limit: int = 10,
-    offset: int = 0,
+    transaction_type: TransactionTypeFilter = Query(
+        TransactionTypeFilter.all, description="Filter by transaction type"
+    ),
 ) -> list[TransactionName]:
     transactions_list = await get_all_transactions(
-            query=query, 
-            user_id=current_user.id, 
-            limit=limit, 
-            offset=offset, 
-            db=db, 
-            transaction_type_filter=transaction_type.value 
-        )
+        query=query,
+        user_id=current_user.id,
+        limit=limit,
+        offset=offset,
+        db=db,
+        transaction_type_filter=transaction_type.value,
+    )
+
     if not transactions_list:
         return []
 
@@ -101,65 +108,91 @@ async def transfer_money(
     return {"detail": "Transfer successful"}
 
 
-
 @router_transaction.get("/export/pdf/{user_id}", response_class=StreamingResponse)
 async def export_transactions_pdf(
     db: db_dependancy,
     current_user: current_user,
-    query: str = Query("", description="Search query for filtering transactions by name"),
-    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type"),
-
+    query: str = Query(
+        "", description="Search query for filtering transactions by name"
+    ),
+    transaction_type: TransactionTypeFilter = Query(
+        TransactionTypeFilter.all, description="Filter by transaction type"
+    ),
 ):
-    
+
     transactions_data_tuples = await get_all_transactions(
-            query=query, 
-            user_id=current_user.id, 
-            limit=10000, 
-            offset=0, 
-            db=db, 
-            transaction_type_filter=transaction_type.value 
-        ) 
-    
+        query=query,
+        user_id=current_user.id,
+        limit=10000,
+        offset=0,
+        db=db,
+        transaction_type_filter=transaction_type.value,
+    )
+
+
     if not transactions_data_tuples:
         raise HTTPException(status_code=404, detail="No transactions found to export.")
 
     pdf_data = []
     for transaction_obj, sender_name, receiver_name in transactions_data_tuples:
-        amount_str = f"- ${float(transaction_obj.amount):.2f}" if transaction_obj.sender_id == current_user.id else f"+ ${float(transaction_obj.amount):.2f}"
-        type_str = "Outgoing" if transaction_obj.sender_id == current_user.id else "Incoming"
-        timestamp_str = str(transaction_obj.timestamp.strftime('%Y-%m-%d %H:%M:%S')) if transaction_obj.timestamp else "N/A" 
+        amount_str = (
+            f"- ${float(transaction_obj.amount):.2f}"
+            if transaction_obj.sender_id == current_user.id
+            else f"+ ${float(transaction_obj.amount):.2f}"
+        )
+        type_str = (
+            "Outgoing" if transaction_obj.sender_id == current_user.id else "Incoming"
+        )
+        timestamp_str = (
+            str(transaction_obj.timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+            if transaction_obj.timestamp
+            else "N/A"
+        )
 
-        pdf_data.append({
-            "sender": sender_name,
-            "receiver": receiver_name,
-            "amount_display": amount_str,
-            "type": type_str,
-            "timestamp_display": timestamp_str,
-            "status_display": "Successful" if transaction_obj.status else "Failed",
-            "description": transaction_obj.description or "-",
-        })
+        pdf_data.append(
+            {
+                "sender": sender_name,
+                "receiver": receiver_name,
+                "amount_display": amount_str,
+                "type": type_str,
+                "timestamp_display": timestamp_str,
+                "status_display": "Successful" if transaction_obj.status else "Failed",
+                "description": transaction_obj.description or "-",
+            }
+        )
+
 
     pdf = PDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
     pdf.chapter_title("Transaction Details")
 
-    headers = ["Sender", "Receiver", "Amount", "Type", "Date & Time", "Status", "Description"]
-    pdf.chapter_body(pdf_data, headers, user_name=current_user.name) 
+    headers = [
+        "Sender",
+        "Receiver",
+        "Amount",
+        "Type",
+        "Date & Time",
+        "Status",
+        "Description",
+    ]
+    pdf.chapter_body(pdf_data, headers, user_name=current_user.name)
 
-    pdf_output_content = pdf.output(dest='S') 
+    pdf_output_content = pdf.output(dest="S")
 
     if isinstance(pdf_output_content, str):
-        pdf_bytes = pdf_output_content.encode('latin-1')
+        pdf_bytes = pdf_output_content.encode("latin-1")
     elif isinstance(pdf_output_content, (bytes, bytearray)):
-        pdf_bytes = bytes(pdf_output_content) 
+        pdf_bytes = bytes(pdf_output_content)
     else:
         raise TypeError("Unexpected PDF output type from FPDF library")
 
-    pdf_file_like_object = io.BytesIO(pdf_bytes)     
+    pdf_file_like_object = io.BytesIO(pdf_bytes)
 
     return StreamingResponse(
-        pdf_file_like_object, 
+        pdf_file_like_object,
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename=transactions_{current_user.id}.pdf"}
+        headers={
+            "Content-Disposition": f"attachment; filename=transactions_{current_user.id}.pdf"
+        },
     )
