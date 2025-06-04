@@ -31,10 +31,7 @@ async def get_transactions(
     query: str = Query("", description="Search query for filtering transactions by name"),
     limit: int = Query(10, ge=1, le=100), 
     offset: int = Query(0, ge=0),
-    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type") 
-
-    limit: int = 10,
-    offset: int = 0,
+    transaction_type: TransactionTypeFilter = Query(TransactionTypeFilter.all, description="Filter by transaction type"),
 ) -> list[TransactionName]:
     transactions_list = await get_all_transactions(
             query=query, 
