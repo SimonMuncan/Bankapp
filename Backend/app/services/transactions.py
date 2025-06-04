@@ -29,6 +29,7 @@ class PDF(FPDF):
         )
         self.set_font("Arial", "I", 8)
         date_width = self.get_string_width(date_to_display) + 2
+
         page_width = self.w
         right_margin = self.r_margin
         x_position = page_width - right_margin - date_width
@@ -58,7 +59,7 @@ class PDF(FPDF):
             self.cell(
                 col_widths.get(header, 30), 7, header, 1, 0, "C", fill=is_first_header
             )
-        self.ln()
+
 
         for row in data:
             self.cell(col_widths.get("Sender", 30), 6, str(row.get("sender", "-")), 1)
@@ -84,4 +85,5 @@ class PDF(FPDF):
                 str(row.get("description", "-")),
                 1,
             )
+
             self.ln()

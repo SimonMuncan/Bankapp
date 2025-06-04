@@ -18,6 +18,10 @@ router_transaction = APIRouter(
     tags=["Transactions"],
 )
 
+class TransactionTypeFilter(str, Enum):
+    all = "all"
+    incoming = "incoming"
+    outgoing = "outgoing"
 
 class TransactionTypeFilter(str, Enum):
     all = "all"
@@ -46,6 +50,7 @@ async def get_transactions(
         db=db,
         transaction_type_filter=transaction_type.value,
     )
+
     if not transactions_list:
         return []
 
@@ -124,6 +129,7 @@ async def export_transactions_pdf(
         transaction_type_filter=transaction_type.value,
     )
 
+
     if not transactions_data_tuples:
         raise HTTPException(status_code=404, detail="No transactions found to export.")
 
@@ -154,6 +160,7 @@ async def export_transactions_pdf(
                 "description": transaction_obj.description or "-",
             }
         )
+
 
     pdf = PDF()
     pdf.set_auto_page_break(auto=True, margin=15)

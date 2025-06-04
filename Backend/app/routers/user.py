@@ -9,6 +9,7 @@ from app.crud.user import (
     get_user_email,
     update_user,
 )
+
 from app.schemas.user import OAuth2TokenResponse, UserIn, UserUpdate
 from app.crud.user import authenticate_user, create_new_user, get_user_email
 from app.schemas.user import OAuth2TokenResponse, UserIn

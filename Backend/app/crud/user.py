@@ -78,6 +78,7 @@ async def update_user(
     if user_to_update.password is not None:
         password_value = user_to_update.password.get_secret_value()
         if password_value:
+
             update_values["hashed_password"] = get_password_hash(password_value)
 
     stmt = (
@@ -90,3 +91,4 @@ async def update_user(
     result = await db.execute(stmt)
     await db.commit()
     return result.scalar_one_or_none()
+

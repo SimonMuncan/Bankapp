@@ -70,8 +70,8 @@ async def get_all_transactions(
     if transaction_type_filter == "incoming":
         base_stmt = base_stmt.where(Transactions.receiver_id == user_id)
     elif transaction_type_filter == "outgoing":
-        base_stmt = base_stmt.where(Transactions.sender_id == user_id)
 
+        base_stmt = base_stmt.where(Transactions.sender_id == user_id)
     if not query:
         final_stmt = (
             base_stmt.order_by(desc(Transactions.timestamp))
