@@ -3,7 +3,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services.authentification import create_access_token
-from app.crud.user import authenticate_user, create_new_user, get_user_email, update_user
+from app.crud.user import (
+    authenticate_user,
+    create_new_user,
+    get_user_email,
+    update_user,
+)
 from app.schemas.user import OAuth2TokenResponse, UserIn, UserUpdate
 from app.crud.user import authenticate_user, create_new_user, get_user_email
 from app.schemas.user import OAuth2TokenResponse, UserIn
@@ -53,11 +58,13 @@ async def login_for_access_token(
 
 @router_user.patch("/profile")
 async def update_users(
-    user_to_update: UserUpdate, 
-    db: db_dependancy, 
+    user_to_update: UserUpdate,
+    db: db_dependancy,
     current_user: current_user,
-) -> dict[str,str]:
+) -> dict[str, str]:
     updated_user = await update_user(current_user.id, user_to_update, db)
     if not updated_user:
-        raise HTTPException(status_code=404, detail="User not found or no update performed")    
+        raise HTTPException(
+            status_code=404, detail="User not found or no update performed"
+        )
     return {"detail": "Successful profile updated!"}

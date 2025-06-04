@@ -8,7 +8,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
 
-async def transfer(sender_id: int, reciever_id: int, amount: float, db: AsyncSession) -> bool:
+async def transfer(
+    sender_id: int, reciever_id: int, amount: float, db: AsyncSession
+) -> bool:
     try:
         stmt1 = (
             update(Wallets)
@@ -42,16 +44,16 @@ async def log_transaction(transaction_data: TransactionIn, db: AsyncSession) -> 
 
 
 async def get_all_transactions(
-        query: str,
-        user_id: int,
-        limit: int,
-        offset: int,
-        db: AsyncSession, 
-        transaction_type_filter: str, 
-    ) -> list[tuple[Transactions, str, str]]:
+    query: str,
+    user_id: int,
+    limit: int,
+    offset: int,
+    db: AsyncSession,
+    transaction_type_filter: str,
+) -> list[tuple[Transactions, str, str]]:
     Sender = aliased(Users)
     Receiver = aliased(Users)
-    
+
     base_stmt = (
         select(
             Transactions,
@@ -65,28 +67,26 @@ async def get_all_transactions(
         )
     )
 
-    if transaction_type_filter == 'incoming':
+    if transaction_type_filter == "incoming":
         base_stmt = base_stmt.where(Transactions.receiver_id == user_id)
-    elif transaction_type_filter == 'outgoing':
+    elif transaction_type_filter == "outgoing":
         base_stmt = base_stmt.where(Transactions.sender_id == user_id)
 
     if not query:
         final_stmt = (
-            base_stmt
-            .order_by(desc(Transactions.timestamp))
+            base_stmt.order_by(desc(Transactions.timestamp))
             .limit(limit=limit)
             .offset(offset=offset)
         )
     else:
         final_stmt = (
-            base_stmt 
-            .where( 
+            base_stmt.where(
                 (Sender.name.icontains(query)) | (Receiver.name.icontains(query))
             )
             .order_by(desc(Transactions.timestamp))
             .limit(limit=limit)
             .offset(offset=offset)
         )
-    
+
     result = await db.execute(final_stmt)
     return [tuple(row) for row in result.all()]
