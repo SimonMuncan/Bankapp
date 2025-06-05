@@ -1,17 +1,17 @@
 import './App.css';
 import WalletPage from './pages/WalletPage/WalletPage';
-import TransferPage from './pages/TransferPage/TransferPage';
+import TransferPage from './pages/TransferPage/TransferPage.tsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import HomePage from './pages/HomePage/HomePage';
+import HomePage from './pages/HomePage/HomePage.tsx';
 import MainLayout from './components/MainLayout';
-import DepositPage from './pages/DepositPage/DepositPage';
-import Transactions from './pages/TransactionsPage/TransactionsPage';
-import RegisterPage from './pages/RegisterPage/RegisterPage';
-import LoginPage from './pages/LoginPage/LoginPage';
+import DepositPage from './pages/DepositPage/DepositPage.tsx';
+import Transactions from './pages/TransactionsPage/TransactionsPage.tsx';
+import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
+import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import ProtectedRoute from './components/ProtectedRoute';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
+import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 
 function App() {
   return (

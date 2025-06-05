@@ -1,53 +1,62 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getTransactions } from '../../services/transactionsService';
+import { getTransactions } from '../../services/transactionsService.ts';
 import styles from './TransactionsPage.module.css'; 
 import { useSelector } from 'react-redux'; 
-import Search from "../../components/Search";
-import ExportPDF from "../../components/ExportPDF";
-import Checkbox from "../../components/Chckbox";
-import PaginationControls from "../../components/Pagination";
+import Search from "../../components/Search.tsx";
+import ExportPDF from "../../components/ExportPDF.tsx";
+import Checkbox from "../../components/Chckbox.tsx";
+import PaginationControls from "../../components/Pagination.tsx";
+import { RootState, Transaction, TypeFilters } from "../../types"; 
 
-function useDebounce(value, delay) {
-    const [debouncedValue, setDebouncedValue] = useState(value);
+export function useDebounce<T>(value: T, delay: number): T {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedValue(value);
         }, delay);
+
         return () => {
             clearTimeout(handler);
         };
     }, [value, delay]);
+
     return debouncedValue;
 }
 
 const ITEMS_PER_PAGE = 10;
 
 const Transactions = () => {
-    const [transactions, setTransactions] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isLastPage, setIsLastPage] = useState(false);
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [typeFilters, setTypeFilters] = useState({
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [isLastPage, setIsLastPage] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState<string | null>('');
+    const [typeFilters, setTypeFilters] = useState<TypeFilters>({
         incoming: false,
         outgoing: false,
     });
-    const { user } = useSelector(state => state.auth);
-    const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    const activeUserId = user.id;
+    const { user } = useSelector((state: RootState) => state.auth);
+    const debouncedSearchTerm = useDebounce<string | null>(searchTerm, 500);
+    const activeUserId: string = String(user.id);
 
-    let transactionTypeParam = 'all'; 
+    let transactionTypeParam: 'all' | 'incoming' | 'outgoing' = 'all';
     if (typeFilters.incoming && !typeFilters.outgoing) {
         transactionTypeParam = 'incoming';
     } else if (!typeFilters.incoming && typeFilters.outgoing) {
         transactionTypeParam = 'outgoing';
     }
 
-    const fetchUserTransactions = useCallback(async (query, userId, page, currentTransactionType) => {
+    const fetchUserTransactions = useCallback(async (
+        query: string | null,
+        userId: number, 
+        page: number,
+        currentTransactionType: 'all' | 'incoming' | 'outgoing'
+    ): Promise<void> => {
         if (!userId) {
             setTransactions([]);
-            setIsLastPage(true); 
+            setIsLastPage(true);
             return;
         }
 
@@ -79,7 +88,7 @@ const Transactions = () => {
 
     useEffect(() => {
         if (activeUserId) {
-            fetchUserTransactions(debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam);
+            fetchUserTransactions(debouncedSearchTerm, Number(activeUserId), currentPage, transactionTypeParam);
         }
     }, [debouncedSearchTerm, activeUserId, currentPage, transactionTypeParam, fetchUserTransactions]);
 
@@ -112,7 +121,7 @@ const Transactions = () => {
                                     <Checkbox id="filterOutgoing" name="outgoing" checked={typeFilters.outgoing} setTypeFilters={setTypeFilters} setCurrentPage={setCurrentPage}/>
                                 </div>
                             </div>
-                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={activeUserId} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
+                            <ExportPDF isLoading={isLoading} debouncedSearchTerm={debouncedSearchTerm} activeUserId={Number(activeUserId)} setError={setError} title="Export PDF" transactionType={transactionTypeParam} />
                         </div>
                     </div>
                 </div>
@@ -155,7 +164,7 @@ const Transactions = () => {
                                                     <td>{transaction.sender || '-'}</td>
                                                     <td>{transaction.receiver || '-'}</td>
                                                     <td className={transaction.status && transaction.receiver_id === parseInt(activeUserId) ? styles.amountSuccess : styles.amountFailed}>
-                                                        {transaction.sender_id === parseInt(activeUserId) ? `- $${parseFloat(transaction.amount).toFixed(2)}` : `+ $${parseFloat(transaction.amount).toFixed(2)}`}
+                                                        {transaction.sender_id === parseInt(activeUserId) ? `- $${parseFloat(String(transaction.amount)).toFixed(2)}` : `+ $${parseFloat(String(transaction.amount)).toFixed(2)}`}
                                                     </td>
                                                     <td>{transaction.sender_id === parseInt(activeUserId) ? 'Outgoing' : 'Incoming'}</td>
                                                     <td>{transaction.timestamp ? new Date(transaction.timestamp).toLocaleString() : 'N/A'}</td>

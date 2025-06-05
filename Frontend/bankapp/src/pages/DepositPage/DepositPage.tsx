@@ -2,18 +2,18 @@ import { useState } from "react";
 import { depositToWallet } from '../../services/depositService';
 import styles from './DepositPage.module.css'; 
 import { useSelector } from 'react-redux'; 
-import Input from "../../components/Input";
+import Input from "../../components/Input.tsx";
+import { RootState, Wallet } from '../../types';
 
+const DepositPage: React.FC = () => {
+    const [amount, setAmount] = useState<string>(''); 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null); 
+    const [walletBalance, setWalletBalance] = useState<number | null>(null); 
+    const { user } = useSelector((state: RootState) => state.auth);
 
-const DepositPage = () => {
-    const [amount, setAmount] = useState(''); 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null); 
-    const [walletBalance, setWalletBalance] = useState(null); 
-    const { user } = useSelector(state => state.auth);
-
-    const handleDeposit = async () => { 
+    const handleDeposit = async (): Promise<void> => { 
         setError(null);
         setSuccessMessage(null);
         setWalletBalance(null); 
@@ -26,7 +26,7 @@ const DepositPage = () => {
 
         setIsLoading(true);
         try {
-            const response = await depositToWallet(user.id, parsedAmount);
+            const response: Wallet = await depositToWallet(user.id, parsedAmount);
             setWalletBalance(response.balance);
             setSuccessMessage(`Deposit successful!`);
             setAmount('');

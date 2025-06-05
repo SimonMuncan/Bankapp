@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './ProfilePage.module.css';
-import { updateService } from '../../services/updateService';
-import Input from '../../components/Input';
-import { updateUserProfileSuccess } from '../../store/actions/authActions';
+import { updateService } from '../../services/updateService.js';
+import Input from '../../components/Input.tsx';
+import { updateUserProfileSuccess } from '../../store/actions/authActions.js';
+import { RootState, UserDataToUpdate } from '../../types/index.ts';
 
 
 const ProfilePage = () => {
-    const { user, token } = useSelector(state => state.auth);
+    const { user } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch(); 
 
-    const [updateName, setUpdateName] = useState('');
-    const [updateEmail, setUpdateEmail] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmNewPassword, setConfirmNewPassword] = useState('');
-    
-    const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [updateName, setUpdateName] = useState<string>('');
+    const [updateEmail, setUpdateEmail] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const [successMessage, setSuccessMessage] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (user) {
@@ -44,7 +44,7 @@ const ProfilePage = () => {
             return;
         }
 
-        const userDataToUpdate = {};
+        const userDataToUpdate: UserDataToUpdate = {"name": "","email": "", "password": ""};
 
 
         if (updateName !== user.name) {
@@ -67,10 +67,10 @@ const ProfilePage = () => {
         }
 
         try {
-            const response = await updateService(userDataToUpdate, token);
+            const response = await updateService(userDataToUpdate);
             setSuccessMessage(response.detail || "Profile updated successfully!");
 
-            const updatedFieldsForRedux = {};
+            const updatedFieldsForRedux = {"name": "","email": ""};
             if (userDataToUpdate.name !== undefined) { 
                 updatedFieldsForRedux.name = userDataToUpdate.name;
             }

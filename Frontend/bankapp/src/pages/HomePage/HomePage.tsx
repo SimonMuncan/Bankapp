@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import styles from './HomePage.module.css'; 
 import { logout } from '../../store/actions/authActions'; 
+import { RootState } from '../../types';
 
 const HomePage = () => {
-  const { isAuthenticated, user } = useSelector(state => state.auth);
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const HomePage = () => {
               <Link to="/profile" className={styles.authLink}>
                 {user.name}
               </Link>
-              <Link onClick={handleLogout} className={`${styles.authLink} ${styles.logoutButton} ms-2`}>
+              <Link to="/login" onClick={handleLogout} className={`${styles.authLink} ${styles.logoutButton} ms-2`}>
                 Logout
               </Link>
             </>

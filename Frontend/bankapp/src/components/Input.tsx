@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from '../pages/TransactionsPage/TransactionsPage.module.css'; 
+import { InputProps } from './../types';
 
-const Input = ({ id, type, value, set, title, placeHolder}) => {
+const Input: React.FC<InputProps> = ({ id, type, value, set, title, placeHolder}) => {
 
     return (
         <>

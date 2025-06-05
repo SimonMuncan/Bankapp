@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegistarPage.module.css'; 
 import { registerService } from '../../services/registerService';
-import InputRegister from "../../components/InputRegister";
+import InputRegister from "../../components/InputRegister.tsx";
+import { RegisterResponse } from '../../types/index.ts';
 
 
 const RegisterPage = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false); 
+    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const [successMessage, setSuccessMessage] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false); 
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -39,7 +40,7 @@ const RegisterPage = () => {
         };
 
         try {
-            const response = await registerService(userData); 
+            const response: RegisterResponse = await registerService(userData); 
 
             setSuccessMessage(response.detail || 'Registration successful! Please login.');
 

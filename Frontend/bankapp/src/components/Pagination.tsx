@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from '../pages/TransactionsPage/TransactionsPage.module.css'; 
+import { PaginationControlsProps } from '../types';
 
-const PaginationControls = ({ 
+const PaginationControls: React.FC<PaginationControlsProps> = ({ 
     currentPage, 
     handlePreviousPage, 
     handleNextPage, 

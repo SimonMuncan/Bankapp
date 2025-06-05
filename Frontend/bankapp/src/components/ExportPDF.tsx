@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import styles from '../pages/TransactionsPage/TransactionsPage.module.css'; 
-import {getTransactionsPDF} from '../services/transactionsService';
+import {getTransactionsPDF} from '../services/transactionsService.ts';
+import { ExportPDFProps } from '../types';
 
-const ExportPDF = ({ isLoading, debouncedSearchTerm, activeUserId, setError, title, transactionType}) => {
+const ExportPDF: React.FC<ExportPDFProps> = ({ isLoading, debouncedSearchTerm, activeUserId, setError, title, transactionType}) => {
     const [isExporting, setIsExporting] = useState(false);
 
     const handleExportPDF = async () => {
@@ -24,7 +25,9 @@ const ExportPDF = ({ isLoading, debouncedSearchTerm, activeUserId, setError, tit
         document.body.appendChild(link);
         link.click();
 
-        link.parentNode.removeChild(link);
+        if (link.parentNode) {
+                link.parentNode.removeChild(link);
+            }
         window.URL.revokeObjectURL(url);
 
     } catch (err) {

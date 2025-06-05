@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from '../pages/LoginPage/LoginPage.module.css';
+import { InputLoginProps } from '../types';
 
-const InputLogin = ({ id, type, value, set, title, placeHolder, isLoading, dispatch, reduxError, clearAuthError}) => {
+const InputLogin: React.FC<InputLoginProps> = ({ id, type, value, set, title, placeHolder, isLoading, dispatch, reduxError, clearAuthError}) => {
 
     return (
         <>
