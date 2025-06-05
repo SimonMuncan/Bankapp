@@ -10,16 +10,17 @@ import {
     loginFailure,
     clearAuthError
 } from '../../store/actions/authActions';
-import InputLogin from '../../components/InputLogin';
+import InputLogin from '../../components/InputLogin.tsx';
+import { RootState } from '../../types';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { loading, error: reduxError, isAuthenticated } = useSelector(state => state.auth);
+    const { loading, error: reduxError, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
 
     useEffect(() => {

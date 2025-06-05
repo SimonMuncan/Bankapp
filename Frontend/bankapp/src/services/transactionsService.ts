@@ -1,6 +1,13 @@
+import { Transaction } from '../types';
 import axios from './api'; 
 
-export const getTransactions = async (query, userId, limit, offset, transactionType) => {
+export const getTransactions = async (
+                                query: string | null,
+                                userId: number,
+                                limit: number,
+                                offset: number,
+                                transactionType: string
+                            ): Promise<Transaction[]> => {
     try {
         const params = {
             query: query || "",

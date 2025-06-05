@@ -1,7 +1,8 @@
 import React from 'react'
 import styles from '../pages/TransactionsPage/TransactionsPage.module.css'; 
+import { SearchProps } from '../types';
 
-const Search = ({ searchTerm, setSearchTerm, searchTitle, searchLabel, searchPlaceholder}) => {
+const Search: React.FC<SearchProps>  = ({ searchTerm, setSearchTerm, searchTitle, searchLabel, searchPlaceholder}) => {
 
   return (
     <>
@@ -11,7 +12,7 @@ const Search = ({ searchTerm, setSearchTerm, searchTitle, searchLabel, searchPla
             <input
                 id="searchTerm"
                 type="text"
-                value={searchTerm} 
+                value={searchTerm || ''} 
                 placeholder={`e.g., ${searchPlaceholder}`}
                 className={styles.inputField}
                 onChange={(event) => setSearchTerm(event.target.value)}

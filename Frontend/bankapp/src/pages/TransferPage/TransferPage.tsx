@@ -1,18 +1,19 @@
 import { useState } from "react";
-import {transferMoney} from '../../services/transferService';
+import {transferMoney} from '../../services/transferService.js';
 import styles from './TransferPage.module.css';
 import { useSelector } from 'react-redux'; 
-import Input from "../../components/Input";
+import Input from "../../components/Input.tsx";
+import { RootState, TransferResponse } from "../../types/index.ts";
 
 
 
 const TransferPage = () => {
-    const [ receiverIdInput, setReceiverIdInput] = useState('');
-    const [ amount, setAmount ] = useState(0);
-    const [ isLoading, setIsLoading ] = useState(false);
-    const [ error, setError] = useState(null);
-    const [ responseMessage, setResponseMessage] = useState('');
-    const { user } = useSelector(state => state.auth);
+    const [ receiverIdInput, setReceiverIdInput] = useState<string>('');
+    const [ amount, setAmount ] = useState<number>(0);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
+    const [ error, setError] = useState<string | null>(null);
+    const [ responseMessage, setResponseMessage] = useState<string>('');
+    const { user } = useSelector((state: RootState) => state.auth);
 
 
     const handleTransfer = async (senderId, receiverId, amount) => {
@@ -24,7 +25,7 @@ const TransferPage = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await transferMoney(senderId, receiverId, amount);
+            const response: TransferResponse = await transferMoney(senderId, receiverId, amount);
             setResponseMessage(response.detail);
             setAmount(0);
             setReceiverIdInput('');
@@ -42,6 +43,12 @@ const TransferPage = () => {
         handleTransfer(user.id, receiverIdInput, amount);
     };
 
+    const handleAmountChange = (value: string): void => {
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue) || value === '') { 
+            setAmount(value === '' ? 0 : numericValue);
+        }
+    };
      return (
         <div className={styles.transferContainer}> 
             <div className={styles.heroSection}>
@@ -55,7 +62,7 @@ const TransferPage = () => {
                         <Input id="receiverIdInput" type="number" value={receiverIdInput} set={setReceiverIdInput} title="Receiver User ID" placeHolder="e.g., 456"/>
                     </div>
                     <div className={styles.formGroup}>
-                        <Input id="amount" type="number" value={amount} set={setAmount} title="Amount to Transfer" placeHolder="e.g., 50.00"/>
+                        <Input id="amount" type="number" value={amount === 0 && !isLoading ? '' : String(amount)} set={handleAmountChange} title="Amount to Transfer" placeHolder="e.g., 50.00"/>
                     </div>
 
                     <button

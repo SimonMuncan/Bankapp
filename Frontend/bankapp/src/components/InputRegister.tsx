@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from '../pages/RegisterPage/RegistarPage.module.css';
+import { InputPropsRegister } from '../types';
 
-const InputRegister = ({ id, type, value, set, title, placeHolder, isLoading}) => {
+const InputRegister: React.FC<InputPropsRegister>  = ({ id, type, value, set, title, placeHolder, isLoading}) => {
 
     return (
         <>
